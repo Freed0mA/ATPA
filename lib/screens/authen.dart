@@ -11,8 +11,8 @@ class _AuthenState extends State<Authen> {
 // Method
   Widget showLogo() {
     return Container(
-      width: 180.0,
-      height: 180.0,
+      width: 160.0,
+      height: 160.0,
       child: Image.asset(
         'images/logo.png',
       ),
@@ -57,11 +57,60 @@ class _AuthenState extends State<Authen> {
     );
   }
 
+  Widget sighInButton() {
+    return RaisedButton(
+      color: Colors.lightGreenAccent[700],
+      child: Text(
+        'Sign In',
+        style: TextStyle(color: Colors.white),
+      ),
+      onPressed: () {},
+    );
+  }
+
+  Widget sighUpBotton() {
+    return RaisedButton(
+      color: Colors.orange[200],
+      child: Text('Sign Up'),
+      onPressed: () {},
+    );
+  }
+
+  Widget showButton() {
+    return Container(
+      width: 250.0,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: sighInButton(),
+          ),
+          mySizeBox(),
+          Expanded(
+            child: sighUpBotton(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget mySizeBox() {
+    return SizedBox(
+      width: 8.0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: [Colors.white, Colors.blue[200]],
+              radius: 2.0,
+              center: Alignment.topCenter,
+            ),
+          ),
           padding: EdgeInsets.only(top: 60.0),
           alignment: Alignment.topCenter,
           child: Column(
@@ -70,6 +119,7 @@ class _AuthenState extends State<Authen> {
               showText(),
               emailText(),
               passwordText(),
+              showButton(),
             ],
           )),
     );
