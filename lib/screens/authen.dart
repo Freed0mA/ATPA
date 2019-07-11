@@ -10,6 +10,10 @@ class Authen extends StatefulWidget {
 
 class _AuthenState extends State<Authen> {
 // Explicit
+  final formKey = GlobalKey<FormState>();
+  String emailString, passwordString;
+
+  String get value => null;
 
 // Method
   @override
@@ -26,12 +30,11 @@ class _AuthenState extends State<Authen> {
     }
   }
 
-  void moveToService(){
-
-    var serviceRoute = MaterialPageRoute(builder: (BuildContext context) => MyService()); 
-    Navigator.of(context).pushAndRemoveUntil(serviceRoute, (Route<dynamic> route) => false);
-    
-
+  void moveToService() {
+    var serviceRoute =
+        MaterialPageRoute(builder: (BuildContext context) => MyService());
+    Navigator.of(context)
+        .pushAndRemoveUntil(serviceRoute, (Route<dynamic> route) => false);
   }
 
   Widget showLogo() {
@@ -65,6 +68,14 @@ class _AuthenState extends State<Authen> {
           labelText: 'Email :',
           hintText: 'you@email.com',
         ),
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Please Fill Email';
+          }
+        },
+        onSaved: (String value) {
+          emailString = value;
+        },
       ),
     );
   }
@@ -73,12 +84,19 @@ class _AuthenState extends State<Authen> {
     return Container(
       width: 250.0,
       child: TextFormField(
-        obscureText: true,
-        decoration: InputDecoration(
-          labelText: 'Password :',
-          hintText: 'More 6 Charactor',
-        ),
-      ),
+          obscureText: true,
+          decoration: InputDecoration(
+            labelText: 'Password :',
+            hintText: 'More 6 Charactor',
+          ),
+          validator: (String value) {
+            if (value.isEmpty) {
+              return 'Please Fill Password';
+            }
+          },
+          onSaved: (String value) {
+            passwordString = value;
+          }),
     );
   }
 
@@ -89,8 +107,25 @@ class _AuthenState extends State<Authen> {
         'Sign In',
         style: TextStyle(color: Colors.white),
       ),
-      onPressed: () {},
+      onPressed: () {
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
+          checkAuthen();
+        }
+      },
     );
+  }
+
+  Future<void> checkAuthen() async {
+    print('Email = $emailString, password = $passwordString');
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    await firebaseAuth.signInWithEmailAndPassword(
+        email: emailString, password: passwordString).then((response){
+          moveToService();
+          }).catchError((response){
+            String messageString = response.message;
+            print('message = $messageString');
+          });
   }
 
   Widget sighUpBotton() {
@@ -145,14 +180,17 @@ class _AuthenState extends State<Authen> {
           ),
           padding: EdgeInsets.only(top: 60.0),
           alignment: Alignment.topCenter,
-          child: Column(
-            children: <Widget>[
-              showLogo(),
-              showText(),
-              emailText(),
-              passwordText(),
-              showButton(),
-            ],
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: <Widget>[
+                showLogo(),
+                showText(),
+                emailText(),
+                passwordText(),
+                showButton(),
+              ],
+            ),
           )),
     );
   }
