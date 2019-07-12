@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:a_tpa/screens/show_list_video.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -116,7 +117,7 @@ class _MyServiceState extends State<MyService> {
       appBar: AppBar(backgroundColor: Colors.lightGreenAccent[700],
         title: showTitleAppBar(),
       ),
-      body: Text('body'),
+      body: ShowListVideo(),
       drawer: myDreawerMenu(),
     );
   }
